@@ -1,4 +1,4 @@
-# BurnoutTracker — Interview Notes
+# BurnoutTracker - Interview Notes
 
 ## System Overview (Plain English)
 
@@ -87,7 +87,7 @@ categories ──< tasks ──< sessions ──< events
 - **categories** and **tasks**: two-level grouping for work
 - **sessions**: one per "Begin Working" → "Stop Working" cycle
   - Stores pre-computed aggregates (net_focused_min, focus_ratio) for fast dashboard rendering
-- **events**: the source of truth — every start/stop/burnout is timestamped
+- **events**: the source of truth - every start/stop/burnout is timestamped
   - We can always recompute session aggregates from events
 - **reminder_logs**: what the buddy asked and what you answered
 - **model_versions**: ML model artifacts with versioning for rollback
@@ -106,7 +106,7 @@ categories ──< tasks ──< sessions ──< events
 
 ### 3. Overlapping Intervals
 **Problem:** Break and procrastination happening simultaneously would corrupt metrics.
-**Solution:** The state machine prevents this — you must be in WORKING state to start either one. They're mutually exclusive.
+**Solution:** The state machine prevents this - you must be in WORKING state to start either one. They're mutually exclusive.
 
 ### 4. ML with Tiny Data
 **Problem:** New users have 0 sessions. The model can't predict anything.

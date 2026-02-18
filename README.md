@@ -1,8 +1,8 @@
-# BurnoutTracker — AI Animated Desktop Buddy
+# BurnoutTracker - AI Animated Desktop Buddy
 
 A local desktop application that tracks work sessions, predicts burnout before it happens, and keeps you company with an animated pixel-art mushroom buddy that lives on your screen.
 
-All data stays on your machine — no cloud, no accounts, no telemetry.
+All data stays on your machine - no cloud, no accounts, no telemetry.
 
 ![App screenshot](screenshot_app.png)
 
@@ -39,19 +39,19 @@ Start a session by clicking the mushroom buddy on your desktop. You pick a **cat
 
 Sessions are stored in a local SQLite database and build up a personal history over time that the ML layer learns from.
 
-**Implementation:** `src/services/session_service.py` — a state machine with four states: `idle → working ↔ on_break / procrastinating → idle`. Events (start, break, resume, end) are written to a normalized SQLite schema via a Repository pattern (`src/data/repository.py`). All SQL is centralized there — no queries scattered across the codebase.
+**Implementation:** `src/services/session_service.py` - a state machine with four states: `idle → working ↔ on_break / procrastinating → idle`. Events (start, break, resume, end) are written to a normalized SQLite schema via a Repository pattern (`src/data/repository.py`). All SQL is centralized there - no queries scattered across the codebase.
 
 ---
 
 ### Burnout & Procrastination Detection
 Two modes work together:
 
-- **Manual check-in** — the buddy periodically pops up and asks "Are you burnt out?" or "Are you procrastinating?" You answer yes/no. Answers are logged.
-- **ML-predicted proactive check** — after enough sessions have accumulated, the ML engine predicts *when* you're likely to hit burnout and triggers the check early, before you feel it.
+- **Manual check-in** - the buddy periodically pops up and asks "Are you burnt out?" or "Are you procrastinating?" You answer yes/no. Answers are logged.
+- **ML-predicted proactive check** - after enough sessions have accumulated, the ML engine predicts *when* you're likely to hit burnout and triggers the check early, before you feel it.
 
 Procrastination gets a separate 5-minute nag reminder: if you told it you're procrastinating but haven't started working again, the buddy bounces to remind you.
 
-**Implementation:** `src/services/tracking_service.py` — runs three `QTimer`s on the Qt event loop: a burnout check timer (default 45 min), a procrastination reminder timer (default 5 min), and a break-elapsed timer (default 30 min). All intervals are overridable by the ML prediction or manually in settings.
+**Implementation:** `src/services/tracking_service.py` - runs three `QTimer`s on the Qt event loop: a burnout check timer (default 45 min), a procrastination reminder timer (default 5 min), and a break-elapsed timer (default 30 min). All intervals are overridable by the ML prediction or manually in settings.
 
 ---
 
@@ -73,19 +73,19 @@ The models degrade gracefully when data is sparse:
 3. **≥ 3 sessions globally** → global moving average
 4. **< 3 sessions** → returns `None`, manual intervals used instead
 
-**Implementation:** `src/ml/predictor.py` — uses `sklearn.linear_model.Ridge` per target. Features include session start hour, day of week, category ID, and recent averages. Models are pickled to `models/` and retrained on launch or after every N sessions. No heavy frameworks — just NumPy and scikit-learn.
+**Implementation:** `src/ml/predictor.py` - uses `sklearn.linear_model.Ridge` per target. Features include session start hour, day of week, category ID, and recent averages. Models are pickled to `models/` and retrained on launch or after every N sessions. No heavy frameworks - just NumPy and scikit-learn.
 
 ---
 
 ### Break Suggestions (Research-Backed)
-When the app suggests a break, it doesn't just say "take a break" — it shows you what the research says about *why* and *how long*. The built-in knowledge base includes:
+When the app suggests a break, it doesn't just say "take a break" - it shows you what the research says about *why* and *how long*. The built-in knowledge base includes:
 
-- **Pomodoro Technique** — 25 min work / 5 min break (Cirillo, 2006)
-- **DeskTime 52/17 Rule** — 52 min work / 17 min break
-- **Ultradian Rhythm** — 90-minute focus cycles aligned with natural brain rhythms
-- **Microsoft Research** — findings on context-switching cost and recovery time
+- **Pomodoro Technique** - 25 min work / 5 min break (Cirillo, 2006)
+- **DeskTime 52/17 Rule** - 52 min work / 17 min break
+- **Ultradian Rhythm** - 90-minute focus cycles aligned with natural brain rhythms
+- **Microsoft Research** - findings on context-switching cost and recovery time
 
-**Implementation:** `src/services/break_research.py` — a static dataclass-based knowledge base. The UI surfaces these as formatted cards with citation links. No external API calls.
+**Implementation:** `src/services/break_research.py` - a static dataclass-based knowledge base. The UI surfaces these as formatted cards with citation links. No external API calls.
 
 ---
 
@@ -96,7 +96,7 @@ A statistics panel showing your productivity patterns across sessions. Includes:
 - **Flexible date filters**: today, this week, this month, custom range
 - **Metric cards**: total sessions, total focused time, average session length, burnout rate
 
-**Implementation:** `src/ui/dashboard_widget.py` — uses PySide6's `QtCharts` for native interactive charts with hover tooltips. Chart generation is abstracted behind `src/ui/plot_backend.py`, which was designed to be swappable with MATLAB (see `docs/MATLAB_SWAP_GUIDE.md`). Styling follows a Notion-inspired dark mode palette.
+**Implementation:** `src/ui/dashboard_widget.py` - uses PySide6's `QtCharts` for native interactive charts with hover tooltips. Chart generation is abstracted behind `src/ui/plot_backend.py`, which was designed to be swappable with MATLAB (see `docs/MATLAB_SWAP_GUIDE.md`). Styling follows a Notion-inspired dark mode palette.
 
 ---
 
@@ -104,23 +104,23 @@ A statistics panel showing your productivity patterns across sessions. Includes:
 A transparent always-on-top window that renders a pixel-art mushroom character directly on your desktop. The buddy:
 
 - Sits in a corner and bobs gently while you work
-- Has a **speech bubble menu** when clicked — all main app actions are accessible from it
+- Has a **speech bubble menu** when clicked - all main app actions are accessible from it
 - Plays **8 distinct animations**: idle bob, blink, happy bounce, walk-wobble, jump arc (with squash-on-landing), angry shake with steam puffs, and two attack variants
 - Reacts to events: jumps to get your attention for reminders, goes angry for overdue procrastination nags
 
-Pixel-art sprites are **procedurally generated in Python at runtime** — no image files shipped. The generator draws each frame pixel-by-pixel using `QPainter`, with a full color palette, outline pass, highlights, and shadows.
+Pixel-art sprites are **procedurally generated in Python at runtime** - no image files shipped. The generator draws each frame pixel-by-pixel using `QPainter`, with a full color palette, outline pass, highlights, and shadows.
 
 **Implementation:**
-- `src/animation/sprite_generator.py` — draws the mushroom frame-by-frame using `QImage` + `QPainter`. The cap is rendered row-by-row using a profile table to approximate a dome shape. Each animation state (idle, blink, jump, etc.) is its own frame generator function. Sprites are cached to `src/assets/sprites/` after first generation.
-- `src/animation/sprite_engine.py` — finite state machine managing which animation plays. Supports looping states and one-shot states (play once, return to idle). One-shot states can chain via callbacks, e.g. `angry_emote → attack_1 → attack_2`. All timing is configurable in `config/animation.json`.
-- `src/animation/buddy_widget.py` — a frameless, transparent `QWidget` with `WindowStaysOnTopHint`. Renders the current sprite frame each tick and handles mouse events for dragging and the speech bubble menu.
+- `src/animation/sprite_generator.py` - draws the mushroom frame-by-frame using `QImage` + `QPainter`. The cap is rendered row-by-row using a profile table to approximate a dome shape. Each animation state (idle, blink, jump, etc.) is its own frame generator function. Sprites are cached to `src/assets/sprites/` after first generation.
+- `src/animation/sprite_engine.py` - finite state machine managing which animation plays. Supports looping states and one-shot states (play once, return to idle). One-shot states can chain via callbacks, e.g. `angry_emote → attack_1 → attack_2`. All timing is configurable in `config/animation.json`.
+- `src/animation/buddy_widget.py` - a frameless, transparent `QWidget` with `WindowStaysOnTopHint`. Renders the current sprite frame each tick and handles mouse events for dragging and the speech bubble menu.
 
 ---
 
 ### Sound Effects
-Soft chime sounds play on buddy interactions. All audio is **procedurally generated** using NumPy sine waves — no audio files included.
+Soft chime sounds play on buddy interactions. All audio is **procedurally generated** using NumPy sine waves - no audio files included.
 
-**Implementation:** `src/animation/sound_manager.py` — generates waveforms at runtime using NumPy and plays them via pygame's mixer. Different tones for different events (notification, click, angry, etc.).
+**Implementation:** `src/animation/sound_manager.py` - generates waveforms at runtime using NumPy and plays them via pygame's mixer. Different tones for different events (notification, click, angry, etc.).
 
 ---
 
@@ -183,7 +183,7 @@ BurnoutTracker/
 │   │   ├── plot_backend.py      # Chart generation (MATLAB-swappable)
 │   │   └── styles.py            # Dark theme stylesheet
 │   │
-│   └── assets/              # Generated assets (sprites, sounds — gitignored)
+│   └── assets/              # Generated assets (sprites, sounds - gitignored)
 │
 ├── config/
 │   └── animation.json       # Animation & sound configuration

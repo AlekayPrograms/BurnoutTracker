@@ -75,7 +75,7 @@ end
 ```
 
 ### Key Notes
-- The swap only changes `plot_backend.py` — no other file is affected
+- The swap only changes `plot_backend.py` - no other file is affected
 - The QPixmap interface stays the same
 - MATLAB figures can be higher quality (vector-based export)
 - Consider caching: MATLAB startup is slow (~5s), reuse the engine
