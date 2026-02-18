@@ -1,10 +1,9 @@
 # BurnoutTracker - AI Animated Desktop Buddy
 
 A local desktop application that tracks work sessions, predicts burnout before it happens, and keeps you company with an animated pixel-art mushroom buddy that lives on your screen.
-
+I built this after struggling to stay focused without burning out - it's a local ML tracker that learns your personal focus patterns and tells you when to stop before it's too late. Python, PySide6, scikit-learn.
 All data stays on your machine - no cloud, no accounts, no telemetry.
 
-![App screenshot](screenshot_app.png)
 
 ---
 
