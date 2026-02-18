@@ -1,0 +1,17 @@
+{
+  "frame_rate_ms": 150,
+  "idle_blink_interval_ms": 3000,
+  "idle_variant_interval_ms": 8000,
+  "walk_speed_px": 2,
+  "sprite_scale": 1.37,
+  "toggles": {
+    "idle_blink": true,
+    "idle_variants": true,
+    "idle_walking": true,
+    "jump_notify": true,
+    "aggressive_animation": true,
+    "sound_enabled": true,
+    "master_animation": true
+  },
+  "volume": 0.5
+}

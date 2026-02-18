@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.log
+.venv/
+venv/
+env/
+models/
+src/assets/sprites/
+src/assets/sounds/
+src/assets/plots/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.claude/
