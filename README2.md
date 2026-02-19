@@ -10,6 +10,7 @@ There's also a cute animated desktop buddy (think MapleStory chibi character) th
 
 ## Key Components
 
+
 ### 1. Data Layer (`src/data/`)
 - **database.py**: Opens the SQLite database and creates all tables
 - **models.py**: Python dataclasses that define the shape of data (Session, Task, Category, Event)
